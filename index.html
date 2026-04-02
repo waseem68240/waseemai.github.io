@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Caption Generator</title>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+
+<h1>AI Caption Generator</h1>
+
+<input type="text" id="inputText" placeholder="Type something..." />
+<br><br>
+
+<button onclick="generate()">Generate Caption</button>
+
+<p id="output"></p>
+
+<script>
+function generate() {
+  let text = document.getElementById("inputText").value;
+  document.getElementById("output").innerHTML =
+  "✨ " + text + " is amazing! <br>🔥 Loving this vibe! <br>💖 Feeling great today!";
+}
+</script>
+
+</body>
+</html>
