@@ -71,20 +71,30 @@ button {
 </div>
 
 <script>
+<script>
 function generate() {
   let text = document.getElementById("inputText").value;
 
   let captions = [
-    "✨ " + text + " looks amazing!",
-    "🔥 This vibe is next level!",
-    "💖 Loving every moment!",
-    "😎 Confidence unlocked!",
-    "🌟 Just perfect!"
+    "✨ " + text + " is pure magic!",
+    "🔥 This moment is unforgettable!",
+    "💖 Living the dream!",
+    "😎 Style speaks louder!",
+    "🌟 Shine like a star!",
+    "💫 Just vibes & good times!",
+    "📸 Capturing memories!",
+    "❤️ Feeling amazing today!",
+    "⚡ Energy on another level!",
+    "🌈 Happiness looks good!"
   ];
 
-  document.getElementById("output").innerHTML = captions.join("<br>");
+  let randomCaptions = [];
+
+  for (let i = 0; i < 3; i++) {
+    let random = captions[Math.floor(Math.random() * captions.length)];
+    randomCaptions.push(random);
+  }
+
+  document.getElementById("output").innerHTML = randomCaptions.join("<br>");
 }
 </script>
-
-</body>
-</html>
