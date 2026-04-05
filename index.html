@@ -111,11 +111,14 @@ button:hover {
     <button onclick="generateCaptions()">Generate Caption</button><div class="output" id="output"></div>
 
 </div><script>
+ <script>
 function generateCaptions() {
-    const text = document.getElementById('inputText').value;
+    const text = document.getElementById('inputText').value.trim();
     const output = document.getElementById('output');
 
-    if (!text) {
+    output.innerHTML = "";
+
+    if (text === "") {
         output.innerHTML = '<div class="caption">⚠️ Please enter some text</div>';
         return;
     }
@@ -129,14 +132,14 @@ function generateCaptions() {
         `❤️ Feeling ${text} today!`
     ];
 
-    let captions = [];
-
     for (let i = 0; i < 3; i++) {
         const random = templates[Math.floor(Math.random() * templates.length)];
-        captions.push(`<div class="caption">${random}</div>`);
-    }
 
-    output.innerHTML = captions.join('');
+        const div = document.createElement("div");
+        div.className = "caption";
+        div.innerText = random;
+
+        output.appendChild(div);
+    }
 }
-</script></body>
-</html>
+</script>
