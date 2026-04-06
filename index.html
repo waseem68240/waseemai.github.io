@@ -180,7 +180,7 @@ function generateCaption() {
         loader.innerText = "";
 
         let used = [];
-        let count = Math.floor(Math.random() * 3) + 3; // 3–5 captions
+        let count = Math.floor(Math.random() * 3) + 3; // 10-15 captions
 
         for(let i=0; i<count; i++) {
             let template;
@@ -191,7 +191,7 @@ function generateCaption() {
 
             used.push(template);
 
-            let caption = template.replace("{text}", input);
+             let caption = template.replace("{text}", input);
 
             let div = document.createElement("div");
             div.className = "card";
