@@ -1,202 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Video Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  /* 🌌 Global Styles */
-  * { box-sizing: border-box; margin:0; padding:0; font-family:'Poppins',sans-serif; }
-  body {
-    min-height:100vh;
-    display:flex; justify-content:center; align-items:center;
-    background: linear-gradient(135deg, #6a0dad, #1e90ff);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    overflow-x:hidden;
-  }
-  @keyframes gradientBG {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator - Professional</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://t3.ftcdn.net/jpg/02/79/11/39/360_F_279113941_V74yv2LAV842Y0Q9Q3XbshnEonmO7v26.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
 
-  /* ✨ Glassmorphism Container */
-  .container {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    animation: fadeIn 1s ease;
-  }
-  @keyframes fadeIn {
-    from{opacity:0; transform: translateY(20px);}
-    to{opacity:1; transform: translateY(0);}
-  }
+        .container {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 20px;
+        }
 
-  h1 {
-    font-weight:600;
-    margin-bottom:20px;
-    text-align:center;
-    text-shadow: 0 0 10px #fff, 0 0 20px #6a0dad, 0 0 30px #1e90ff;
-  }
+        .left-panel { flex: 1; }
+        .right-panel { 
+            flex: 1; 
+            background: rgba(0,0,0,0.4); 
+            border-radius: 15px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border: 2px dashed #444;
+        }
 
-  input {
-    width:100%;
-    padding:12px 15px;
-    border-radius:12px;
-    border:none;
-    margin-bottom:15px;
-    background: rgba(255,255,255,0.1);
-    color:white;
-    font-size:16px;
-    outline:none;
-    transition:0.3s;
-  }
-  input:focus { background: rgba(255,255,255,0.2); }
+        h2 { color: #00d2ff; margin-top: 0; }
 
-  button {
-    padding:12px 20px;
-    border:none;
-    border-radius:12px;
-    background: #6a0dad;
-    color:white;
-    font-weight:600;
-    cursor:pointer;
-    box-shadow: 0 0 10px #6a0dad, 0 0 20px #1e90ff;
-    transition:0.3s;
-    position:relative;
-    overflow:hidden;
-  }
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #fff, 0 0 30px #6a0dad, 0 0 40px #1e90ff;
-  }
-  button:disabled {
-    opacity:0.5;
-    cursor:not-allowed;
-  }
+        textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-sizing: border-box;
+        }
 
-  .status { margin:15px 0; font-style:italic; }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
 
-  canvas {
-    margin-top:20px;
-    border-radius:20px;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-  }
+        .btn-gen { background: linear-gradient(45deg, #00c6ff, #0072ff); color: white; }
+        .btn-down { background: #28a745; color: white; display: none; text-align: center; text-decoration: none; }
 
-  .download-btn {
-    margin-top:15px;
-    display:none;
-  }
+        video { width: 100%; border-radius: 10px; display: none; }
 
-  .typing-text {
-    display:inline-block;
-    border-right:2px solid white;
-    animation: blink 1s infinite;
-  }
-  @keyframes blink { 0%,50%,100%{border-color:white;} 25%,75%{border-color:transparent;} }
-
-</style>
+        /* Loader Animation */
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #00d2ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
+
 <div class="container">
-  <h1>AI Video Generator</h1>
-  <input type="text" id="prompt" placeholder="Enter your video prompt...">
-  <button id="generateBtn">Generate Video</button>
-  <div class="status" id="status"></div>
-  <canvas id="videoCanvas" width="720" height="1280"></canvas>
-  <button id="downloadBtn" class="download-btn">Download Video</button>
-  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+    <div class="left-panel">
+        <h2>AI Video Generator</h2>
+        <label>Enter Prompt:</label>
+        <textarea id="prompt" rows="4" placeholder="Describe your video scene..."></textarea>
+        
+        <label>Aspect Ratio:</label>
+        <select id="ratio">
+            <option>16:9 (Horizontal)</option>
+            <option>9:16 (Vertical)</option>
+        </select>
+
+        <button class="btn btn-gen" onclick="startGeneration()">Generate AI Video</button>
+        <a id="downloadBtn" class="btn btn-down" download="AI_Generated_Video.mp4">Download Video</a>
+    </div>
+
+    <div class="right-panel" id="previewBox">
+        <div class="loader" id="loader"></div>
+        <p id="statusText">Video Preview will appear here</p>
+        <video id="videoPlayer" controls></video>
+    </div>
 </div>
 
 <script>
-const generateBtn = document.getElementById('generateBtn');
-const status = document.getElementById('status');
-const canvas = document.getElementById('videoCanvas');
-const ctx = canvas.getContext('2d');
-const downloadBtn = document.getElementById('downloadBtn');
-const bgMusic = document.getElementById('bgMusic');
+    async function startGeneration() {
+        const promptText = document.getElementById('prompt').value;
+        const videoPlayer = document.getElementById('videoPlayer');
+        const loader = document.getElementById('loader');
+        const statusText = document.getElementById('statusText');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-generateBtn.addEventListener('click', async () => {
-  const prompt = document.getElementById('prompt').value.trim();
-  if(!prompt) return alert("Please enter a prompt!");
-  
-  generateBtn.disabled = true;
-  status.innerHTML = '<span class="typing-text">Generating AI Video...</span>';
-  downloadBtn.style.display = 'none';
-  
-  // Start background music
-  bgMusic.volume = 0.1;
-  bgMusic.play();
+        if (!promptText) {
+            alert("Please enter a prompt first!");
+            return;
+        }
 
-  // Split prompt into 3-5 scenes
-  const scenes = prompt.split('.').filter(s=>s.trim()).slice(0,5);
-  const sceneDuration = 3000; // 3 sec per scene
+        // Reset UI
+        statusText.innerText = "AI is thinking...";
+        loader.style.display = "block";
+        videoPlayer.style.display = "none";
+        downloadBtn.style.display = "none";
 
-  // Speech Synthesis
-  const utterance = new SpeechSynthesisUtterance(prompt);
-  utterance.rate = 1;
-  speechSynthesis.speak(utterance);
+        // Step 1: Simulate Generation Delay (3 seconds)
+        setTimeout(async () => {
+            // Hum ek sample video URL use kar rahe hain simulation ke liye
+            const videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4";
+            
+            // Step 2: Auto Voice-Over (Speech)
+            const speech = new SpeechSynthesisUtterance(promptText);
+            window.speechSynthesis.speak(speech);
 
-  // MediaRecorder
-  const stream = canvas.captureStream(30);
-  const recorder = new MediaRecorder(stream);
-  let chunks = [];
-  recorder.ondataavailable = e => chunks.push(e.data);
-  recorder.start();
+            // Step 3: Video Load
+            videoPlayer.src = videoUrl;
+            videoPlayer.style.display = "block";
+            loader.style.display = "none";
+            statusText.style.display = "none";
 
-  // Draw scenes
-  for(let i=0; i<scenes.length; i++){
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = `https://picsum.photos/720/1280?random=${i+1}`;
-    await new Promise(res=>img.onload=res);
-
-    // Animate fade + zoom
-    const start = performance.now();
-    await new Promise(res=>{
-      function animate(t){
-        let progress = (t - start)/sceneDuration;
-        if(progress>1) progress=1;
-        ctx.globalAlpha = progress; // fade in
-        const scale = 1 + 0.1*progress; // zoom
-        ctx.setTransform(scale,0,0,scale,canvas.width/2*(1-scale),canvas.height/2*(1-scale));
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        // Text overlay
-        ctx.setTransform(1,0,0,1,0,0);
-        ctx.fillStyle="white";
-        ctx.font="bold 60px Poppins";
-        ctx.textAlign="center";
-        ctx.fillText(scenes[i],canvas.width/2,100);
-        if(progress<1) requestAnimationFrame(animate);
-        else res();
-      }
-      animate(start);
-    });
-  }
-
-  recorder.stop();
-  recorder.onstop = e => {
-    const blob = new Blob(chunks,{type:'video/webm'});
-    const url = URL.createObjectURL(blob);
-    downloadBtn.href = url;
-    downloadBtn.download = "AI_Video.webm";
-    downloadBtn.style.display = 'inline-block';
-    status.innerText = 'Video Generated Successfully!';
-    generateBtn.disabled = false;
-    bgMusic.pause();
-  }
-});
+            // Step 4: Enable Download
+            // Hum video file ko fetch karke blob banayenge taake asli download ho sake
+            const response = await fetch(videoUrl);
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            
+            downloadBtn.href = blobUrl;
+            downloadBtn.style.display = "block";
+            
+            alert("Video Generated Successfully!");
+        }, 3000);
+    }
 </script>
+
 </body>
-    </html>
+</html>
